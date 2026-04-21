@@ -2,6 +2,54 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../metaExtra"
+		},
+		{
+			"path": "../metarun"
+		},
+		{
+			"path": "../nea"
+		},
+		{
+			"path": "../package-dev"
+		},
+		{
+			"path": "../../repos/flextable"
+		},
+		{
+			"path": "../../repos/ggplot2"
+		},
+		{
+			"path": "../../repos/gtsummary"
+		},
+		{
+			"path": "../../repos/officer"
+		},
+		{
+			"path": "../../repos/openxlsx2"
+		},
+		{
+			"path": "../../repos/readr"
+		},
+		{
+			"path": "../../repos/readxl"
+		},
+		{
+			"path": "../../repos/rio"
+		},
+		{
+			"path": "../../repos/rlang"
+		},
+		{
+			"path": "../../repos/roxygen2"
+		},
+		{
+			"path": "../../repos/tidyselect"
+		},
+		{
+			"path": "../../repos/vctrs"
 		}
 	],
 	"settings": {}
