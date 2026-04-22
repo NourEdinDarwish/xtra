@@ -59,6 +59,10 @@ or any plotting call wrapped in a function. Unlike \code{\link[ggplot2:ggsave]{g
 only supports \code{ggplot} and \code{grid} objects, \code{save_plot()} can capture any
 plotting call (e.g., base R) by wrapping it in a function (e.g., \code{function() plot(1:10)}).
 }
+\examples{
+tmp <- tempfile(fileext = ".png")
+save_plot(function() plot(1:10), tmp, width = 5, height = 4)
+}
 \seealso{
 \code{\link[ggplot2:ggsave]{ggplot2::ggsave()}}
 }

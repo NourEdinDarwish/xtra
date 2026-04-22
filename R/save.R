@@ -24,16 +24,16 @@
 #' @param dpi Plot resolution.
 #' @param ... Other arguments passed on to the graphics device function, as
 #'   specified by `device`.
-#'
 #' @return A named list (returned invisibly) with elements:
 #' * `file`: Full file path.
 #' * `width`: Plot width.
 #' * `height`: Plot height.
 #' * `units`: Unit of `width` and `height`.
 #' * `dpi`: Plot resolution.
-#'
 #' @seealso [ggplot2::ggsave()]
-#'
+#' @examples
+#' tmp <- tempfile(fileext = ".png")
+#' save_plot(function() plot(1:10), tmp, width = 5, height = 4)
 #' @export
 save_plot <- function(
   plot,
@@ -47,6 +47,7 @@ save_plot <- function(
   ...
 ) {
   filename <- validate_path(path, filename)
+  units <- rlang::arg_match0(units, c("in", "cm", "mm", "px"))
 
   dev <- validate_device(device, filename, dpi = dpi)
   dim <- plot_dim(c(width, height), units = units, dpi = dpi)
