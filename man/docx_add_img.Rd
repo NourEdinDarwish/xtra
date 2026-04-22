@@ -57,3 +57,16 @@ Adds an image to a Word document with optional captioning and auto-numbering.
 Images larger than the page margins are automatically scaled down to fit
 within the available page space while preserving their aspect ratio.
 }
+\examples{
+library(officer)
+
+# Create a temporary image
+img <- tempfile(fileext = ".png")
+png(img, width = 4, height = 3, units = "in", res = 72)
+plot(1:10, main = "Example Plot")
+dev.off()
+
+doc <- read_docx()
+doc <- docx_add_img(doc, src = img, width = 4, height = 3)
+print(doc, target = tempfile(fileext = ".docx"))
+}

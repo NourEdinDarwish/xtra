@@ -24,9 +24,19 @@
 #'   that).
 #' @param fp_p Paragraph formatting properties applied to the entire paragraph
 #'   (image, caption, and auto-numbering), created with [officer::fp_par()].
-#'
 #' @return The modified `rdocx` object.
+#' @examples
+#' library(officer)
 #'
+#' # Create a temporary image
+#' img <- tempfile(fileext = ".png")
+#' png(img, width = 4, height = 3, units = "in", res = 72)
+#' plot(1:10, main = "Example Plot")
+#' dev.off()
+#'
+#' doc <- read_docx()
+#' doc <- docx_add_img(doc, src = img, width = 4, height = 3)
+#' print(doc, target = tempfile(fileext = ".docx"))
 #' @export
 docx_add_img <- function(
   x,

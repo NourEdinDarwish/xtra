@@ -1,9 +1,7 @@
 test_that("read_excel_multi_headers works", {
-  library(openxlsx2)
-
   # Build a simple workbook: merged "Demographics" over A1:B1, sub-headers in
   # row 2
-  wb <- wb_workbook()$
+  wb <- openxlsx2::wb_workbook()$
     add_worksheet("Sheet1")$
     add_data(x = "Demographics", dims = "A1")$
     merge_cells(dims = "A1:B1")$
