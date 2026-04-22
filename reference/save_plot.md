@@ -1,11 +1,14 @@
 # Save a plot to a file
 
-Adapted from `ggplot2::ggsave()`. A general-purpose plot-saving function
-that works with any R plotting system. Accepts `ggplot` objects, `grid`
-objects, or any plotting call wrapped in a function. Unlike
-`ggplot2::ggsave()`, which only supports `ggplot` and `grid` objects,
-`save_plot()` can capture any plotting call (e.g., base R) by wrapping
-it in a function (e.g., `function() plot(1:10)`).
+Adapted from
+[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html).
+A general-purpose plot-saving function that works with any R plotting
+system. Accepts `ggplot` objects, `grid` objects, or any plotting call
+wrapped in a function. Unlike
+[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html),
+which only supports `ggplot` and `grid` objects, `save_plot()` can
+capture any plotting call (e.g., base R) by wrapping it in a function
+(e.g., `function() plot(1:10)`).
 
 ## Usage
 
@@ -83,7 +86,7 @@ A named list (returned invisibly) with elements:
 
 ## See also
 
-`ggplot2::ggsave()`
+[`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html)
 
 ## Examples
 

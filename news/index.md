@@ -12,8 +12,9 @@
 - New
   [`save_plot()`](https://nouredindarwish.github.io/xtra/reference/save_plot.md)
   saves any R plot (ggplot, grid, or base R wrapped in a function) to a
-  file. Adapted from `ggplot2::ggsave()`, with broader support for
-  arbitrary plotting calls.
+  file. Adapted from
+  [`ggplot2::ggsave()`](https://ggplot2.tidyverse.org/reference/ggsave.html),
+  with broader support for arbitrary plotting calls.
 
 - New
   [`docx_add_img()`](https://nouredindarwish.github.io/xtra/reference/docx_add_img.md)
