@@ -49,7 +49,6 @@ If \code{NULL}, all columns are read.}
     \item{\code{detect_dates}}{If \code{TRUE}, attempt to recognize dates and perform conversion.}
     \item{\code{na}}{Defines values to be treated as NA. Can be a character vector of strings
 or a named list: list(strings = ..., numbers = ...). Blank cells are always converted to \code{NA}.}
-    \item{\code{fill_merged_cells}}{If \code{TRUE}, the value in a merged cell is given to all cells within the merge.}
     \item{\code{dims}}{Character string of type "A1:B2" as optional dimensions to be imported.}
     \item{\code{show_formula}}{If \code{TRUE}, the underlying spreadsheet formulas are shown.}
     \item{\code{named_region}}{Character string with a \code{named_region} (defined name or table).
