@@ -1,0 +1,8 @@
+pandoc: 3.1.11
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles: {}
+last_built: 2026-04-22T20:35Z
+urls:
+  reference: https://nouredindarwish.github.io/xtra/reference
+  article: https://nouredindarwish.github.io/xtra/articles

@@ -1,0 +1,33 @@
+# xtra
+
+xtra provides a growing collection of extra utility functions for R. It
+currently includes:
+
+- [`read_excel_multi_headers()`](https://nouredindarwish.github.io/xtra/reference/read_excel_multi_headers.md)
+  reads Excel files with multiple header rows and merged cells.
+- [`save_plot()`](https://nouredindarwish.github.io/xtra/reference/save_plot.md)
+  saves any plot to disk.
+- [`docx_add_img()`](https://nouredindarwish.github.io/xtra/reference/docx_add_img.md)
+  adds images with optional captioning to Word documents.
+
+## Installation
+
+You can install the development version of xtra from
+[GitHub](https://github.com/NourEdinDarwish/xtra) with:
+
+``` r
+# install.packages("pak")
+pak::pak("NourEdinDarwish/xtra")
+```
+
+# Package index
+
+## All functions
+
+- [`docx_add_img()`](https://nouredindarwish.github.io/xtra/reference/docx_add_img.md)
+  : Add an image to a Word document
+- [`read_excel_multi_headers()`](https://nouredindarwish.github.io/xtra/reference/read_excel_multi_headers.md)
+  : Read an Excel file with multiple header rows
+- [`save_plot()`](https://nouredindarwish.github.io/xtra/reference/save_plot.md)
+  : Save a plot to a file
+
