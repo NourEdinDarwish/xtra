@@ -5,6 +5,11 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/NourEdinDarwish/xtra/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NourEdinDarwish/xtra/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/NourEdinDarwish/xtra/graph/badge.svg)](https://app.codecov.io/gh/NourEdinDarwish/xtra)
+[![test-coverage](https://github.com/NourEdinDarwish/xtra/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/NourEdinDarwish/xtra/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://github.com/NourEdinDarwish/xtra/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/NourEdinDarwish/xtra/actions/workflows/pkgdown.yaml)
 <!-- badges: end -->
 
 xtra provides a growing collection of extra utility functions for R. It

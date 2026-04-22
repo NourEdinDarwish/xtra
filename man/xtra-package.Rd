@@ -12,6 +12,7 @@ A growing collection of extra utility functions for R. Current tools include rea
 Useful links:
 \itemize{
   \item \url{https://github.com/NourEdinDarwish/xtra}
+  \item \url{https://nouredindarwish.github.io/xtra/}
   \item Report bugs at \url{https://github.com/NourEdinDarwish/xtra/issues}
 }
 
