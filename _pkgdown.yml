@@ -2,3 +2,9 @@ url: https://nouredindarwish.github.io/xtra/
 template:
   bootstrap: 5
   light-switch: true
+
+reference:
+- contents:
+  - read_excel_multi_headers
+  - save_plot
+  - docx_add_img
