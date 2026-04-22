@@ -1,10 +1,13 @@
 Package: xtra
-Title: What the Package Does (One Line, Title Case)
-Version: 0.0.0.9000
+Title: Extra Utility Functions for R
+Version: 0.1.0
 Authors@R: 
     person("Nour Edin", "Darwish", , "nouredindarwish@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "0009-0009-5527-4539"))
-Description: What the package does (one paragraph).
+Description: A growing collection of extra utility functions for R.
+    Current tools include reading Excel files that use multiple header
+    rows with merged cells, saving plots to disk, and adding images with
+    optional captioning to Word documents.
 License: MIT + file LICENSE
 URL: https://github.com/NourEdinDarwish/xtra
 BugReports: https://github.com/NourEdinDarwish/xtra/issues

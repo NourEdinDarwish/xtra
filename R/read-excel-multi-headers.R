@@ -6,13 +6,16 @@
 #'
 #' This function processes each requested sheet individually. For each column in
 #' a sheet, the header rows are combined vertically into a single name,
-#' separated by `sep`. During this process, merged cells are filled, missing or
-#' whitespace-only cell values are ignored, and consecutive duplicate values are
-#' deduplicated. For example, a column where `"Demographics"` is merged across
-#' two cells, followed by a blank cell and an `"Age"` cell, cleanly collapses
-#' into `"Demographics_Age"` (rather than `"Demographics_Demographics__Age"`).
+#' separated by `sep`. During this process, the value of each merged cell is
+#' propagated to every cell in the merged range, missing or whitespace-only cell
+#' values are ignored, and consecutive duplicate values are deduplicated. For
+#' example, a column where `"Demographics"` is merged across two cells, followed
+#' by a blank cell and an `"Age"` cell, cleanly collapses into
+#' `"Demographics_Age"` (rather than `"Demographics_Demographics__Age"`).
 #' Finally, column names are repaired to ensure uniqueness, and data types are
-#' automatically guessed after import.
+#' automatically guessed after import. All merged cells in the sheet (not just
+#' headers) are unmerged, with each cell in the range receiving the original
+#' merged value.
 #'
 #' Header collapsing is performed after empty rows and columns are removed (when
 #' `skip_empty_rows` or `skip_empty_cols` is `TRUE`), so `n_headers` refers to

@@ -4,9 +4,9 @@
 \name{xtra-package}
 \alias{xtra}
 \alias{xtra-package}
-\title{xtra: What the Package Does (One Line, Title Case)}
+\title{xtra: Extra Utility Functions for R}
 \description{
-What the package does (one paragraph).
+A growing collection of extra utility functions for R. Current tools include reading Excel files that use multiple header rows with merged cells, saving plots to disk, and adding images with optional captioning to Word documents.
 }
 \seealso{
 Useful links:
