@@ -2,31 +2,37 @@
 % Please edit documentation in R/read-excel-multi-headers.R
 \name{read_excel_multi_headers}
 \alias{read_excel_multi_headers}
-\title{Read Excel files with multiple header rows}
+\title{Read an Excel file with multiple header rows}
 \usage{
 read_excel_multi_headers(
   file,
   sheets = 1,
   n_headers = 1,
   sep = "_",
+  skip_empty_rows = TRUE,
+  skip_empty_cols = TRUE,
   simplify = TRUE,
   ...
 )
 }
 \arguments{
-\item{file}{A path to an existing .xlsx, .xlsm or .xlsb file}
+\item{file}{A path to an existing .xlsx, .xlsm, or .xlsb file.}
 
-\item{sheets}{(\code{\link[dplyr:dplyr_tidy_select]{tidy-select}})\cr
-Sheets to read. Default is \code{1}, which reads the first sheet.}
+\item{sheets}{<\code{\link[dplyr:dplyr_tidy_select]{tidy-select}}> Sheets to read.
+Defaults to \code{1} (the first sheet).}
 
-\item{n_headers}{A single integer indicating the number of rows at the top
-of the selected data to treat as the header. Defaults to 1.}
+\item{n_headers}{Number of header rows at the top of the sheet to combine
+into a single row of column names. Defaults to \code{1}.}
 
-\item{sep}{Separator used to collapse multi-row headers. Defaults to "_".}
+\item{sep}{String used to separate the text from each header cell when
+combining them into a single column name. Defaults to \code{"_"} (e.g.,
+\code{"Header1_Header2"}).}
 
-\item{simplify}{Logical. If \code{TRUE} (default), the function returns a single
-data frame if only one sheet is read. If \code{FALSE}, it always returns a list
-of data frames.}
+\item{skip_empty_rows, skip_empty_cols}{If \code{TRUE} (the default), rows or
+columns that contain only missing values are removed.}
+
+\item{simplify}{If \code{TRUE} (the default) and only one sheet is read, return a
+single data frame. If \code{FALSE}, always return a named list of data frames.}
 
 \item{...}{
   Arguments passed on to \code{\link[openxlsx2:wb_to_df]{openxlsx2::wb_to_df}}
@@ -34,8 +40,6 @@ of data frames.}
     \item{\code{start_row}}{first row to begin looking for data.}
     \item{\code{start_col}}{first column to begin looking for data.}
     \item{\code{row_names}}{If \code{TRUE}, the first col of data will be used as row names.}
-    \item{\code{skip_empty_rows}}{If \code{TRUE}, empty rows are skipped.}
-    \item{\code{skip_empty_cols}}{If \code{TRUE}, empty columns are skipped.}
     \item{\code{skip_hidden_rows}}{If \code{TRUE}, hidden rows are skipped.}
     \item{\code{skip_hidden_cols}}{If \code{TRUE}, hidden columns are skipped.}
     \item{\code{rows}}{A numeric vector specifying which rows in the xlsx file to read.
@@ -57,21 +61,44 @@ If no sheet is selected, the first appearance will be selected. See \code{\link[
   }}
 }
 \value{
-A data frame (if one sheet and \code{simplify = TRUE}) or a list of data
-frames.
+A data frame (if one sheet and \code{simplify = TRUE}) or a named list of
+data frames.
 }
 \description{
-Imports data from modern Excel files (.xlsx, .xlsm, .xlsb), automatically
-handling multi-row merged headers by collapsing them into single column
-names. It reads the raw data using \code{openxlsx2} and then converts types using
-\code{readr::type_convert}.
+Reads one or more sheets from an Excel file (.xlsx, .xlsm, .xlsb) with
+multiple header rows (often involving merged cells). These rows are
+automatically collapsed to form a single row of column names.
 }
 \details{
-This function is designed for "messy" Excel tables where headers span
-multiple rows (often using merged cells). It collapses these rows into a
-single unique variable name (e.g., "Demographics_Age").
+This function processes each requested sheet individually. For each column in
+a sheet, the header rows are combined vertically into a single name,
+separated by \code{sep}. During this process, merged cells are filled, missing or
+whitespace-only cell values are ignored, and consecutive duplicate values are
+deduplicated. For example, a column where \code{"Demographics"} is merged across
+two cells, followed by a blank cell and an \code{"Age"} cell, cleanly collapses
+into \code{"Demographics_Age"} (rather than \code{"Demographics_Demographics__Age"}).
+Finally, column names are repaired to ensure uniqueness, and data types are
+automatically guessed after import.
 
-\strong{Note:} This function supports modern XML-based Excel formats (.xlsx,
-.xlsm, .xlsb).
-It does \strong{not} support the legacy binary .xls format.
+Header collapsing is performed after empty rows and columns are removed (when
+\code{skip_empty_rows} or \code{skip_empty_cols} is \code{TRUE}), so \code{n_headers} refers to
+the first rows of the resulting sheet.
+}
+\examples{
+library(openxlsx2)
+
+# Create a workbook with a merged header spanning two columns
+wb <- wb_workbook()$
+  add_worksheet("Sheet1")$
+  add_data(x = "Demographics", dims = "A1")$
+  merge_cells(dims = "A1:B1")$
+  add_data(x = "Name", dims = "A2")$
+  add_data(x = "Age", dims = "B2")$
+  add_data(x = "Alice", dims = "A3")$
+  add_data(x = 30, dims = "B3")
+
+tmp <- tempfile(fileext = ".xlsx")
+wb$save(tmp)
+
+read_excel_multi_headers(tmp, n_headers = 2)
 }

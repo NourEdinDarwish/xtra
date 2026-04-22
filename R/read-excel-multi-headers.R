@@ -1,38 +1,64 @@
-#' Read Excel files with multiple header rows
+#' Read an Excel file with multiple header rows
 #'
-#' Imports data from modern Excel files (.xlsx, .xlsm, .xlsb), automatically
-#' handling multi-row merged headers by collapsing them into single column
-#' names. It reads the raw data using `openxlsx2` and then converts types using
-#' `readr::type_convert`.
+#' Reads one or more sheets from an Excel file (.xlsx, .xlsm, .xlsb) with
+#' multiple header rows (often involving merged cells). These rows are
+#' automatically collapsed to form a single row of column names.
 #'
-#' @details
-#' This function is designed for "messy" Excel tables where headers span
-#' multiple rows (often using merged cells). It collapses these rows into a
-#' single unique variable name (e.g., "Demographics_Age").
+#' This function processes each requested sheet individually. For each column in
+#' a sheet, the header rows are combined vertically into a single name,
+#' separated by `sep`. During this process, merged cells are filled, missing or
+#' whitespace-only cell values are ignored, and consecutive duplicate values are
+#' deduplicated. For example, a column where `"Demographics"` is merged across
+#' two cells, followed by a blank cell and an `"Age"` cell, cleanly collapses
+#' into `"Demographics_Age"` (rather than `"Demographics_Demographics__Age"`).
+#' Finally, column names are repaired to ensure uniqueness, and data types are
+#' automatically guessed after import.
 #'
-#' **Note:** This function supports modern XML-based Excel formats (.xlsx,
-#' .xlsm, .xlsb).
-#' It does **not** support the legacy binary .xls format.
+#' Header collapsing is performed after empty rows and columns are removed (when
+#' `skip_empty_rows` or `skip_empty_cols` is `TRUE`), so `n_headers` refers to
+#' the first rows of the resulting sheet.
 #'
-#' @inheritParams openxlsx2::wb_load
-#' @param sheets ([`tidy-select`][dplyr::dplyr_tidy_select])\cr
-#'   Sheets to read. Default is `1`, which reads the first sheet.
-#' @param n_headers A single integer indicating the number of rows at the top
-#'   of the selected data to treat as the header. Defaults to 1.
-#' @param sep Separator used to collapse multi-row headers. Defaults to "_".
-#' @param simplify Logical. If `TRUE` (default), the function returns a single
-#'   data frame if only one sheet is read. If `FALSE`, it always returns a list
-#'   of data frames.
+#' @param file A path to an existing .xlsx, .xlsm, or .xlsb file.
+#' @param sheets <[`tidy-select`][dplyr::dplyr_tidy_select]> Sheets to read.
+#'   Defaults to `1` (the first sheet).
+#' @param n_headers Number of header rows at the top of the sheet to combine
+#'   into a single row of column names. Defaults to `1`.
+#' @param sep String used to separate the text from each header cell when
+#'   combining them into a single column name. Defaults to `"_"` (e.g.,
+#'   `"Header1_Header2"`).
+#' @param skip_empty_rows,skip_empty_cols If `TRUE` (the default), rows or
+#'   columns that contain only missing values are removed.
+#' @param simplify If `TRUE` (the default) and only one sheet is read, return a
+#'   single data frame. If `FALSE`, always return a named list of data frames.
 #' @inheritDotParams openxlsx2::wb_to_df -sheet -col_names -convert
 #'   -fill_merged_cells -types -check_names
-#' @return A data frame (if one sheet and `simplify = TRUE`) or a list of data
-#'   frames.
+#' @return A data frame (if one sheet and `simplify = TRUE`) or a named list of
+#'   data frames.
+#' @examples
+#' library(openxlsx2)
+#'
+#' # Create a workbook with a merged header spanning two columns
+#' wb <- wb_workbook()$
+#'   add_worksheet("Sheet1")$
+#'   add_data(x = "Demographics", dims = "A1")$
+#'   merge_cells(dims = "A1:B1")$
+#'   add_data(x = "Name", dims = "A2")$
+#'   add_data(x = "Age", dims = "B2")$
+#'   add_data(x = "Alice", dims = "A3")$
+#'   add_data(x = 30, dims = "B3")
+#'
+#' tmp <- tempfile(fileext = ".xlsx")
+#' wb$save(tmp)
+#'
+#' read_excel_multi_headers(tmp, n_headers = 2)
 #' @export
 read_excel_multi_headers <- function(
   file,
   sheets = 1,
   n_headers = 1,
   sep = "_",
+  skip_empty_rows = TRUE,
+  skip_empty_cols = TRUE,
   simplify = TRUE,
   ...
 ) {
@@ -41,26 +67,25 @@ read_excel_multi_headers <- function(
   # Capture dots to inspect and filter them
   dots <- rlang::list2(...)
 
-  # List of arguments that we must control internally
-  blocked_args <- c(
-    "sheet",
-    "col_names",
-    "convert",
-    "fill_merged_cells",
-    "types",
-    "check_names"
+  # Check for arguments that are controlled internally
+  blocked <- intersect(
+    names(dots),
+    c(
+      "sheet",
+      "col_names",
+      "convert",
+      "fill_merged_cells",
+      "types",
+      "check_names"
+    )
   )
 
-  # Check if user tried to pass any blocked arguments
-  if (any(names(dots) %in% blocked_args)) {
-    bad_args <- intersect(names(dots), blocked_args)
-    cli::cli_warn(c(
-      "!" = "The following arguments in {.arg ...} are ignored because they are controlled internally:",
-      "*" = "{.pkg {bad_args}}"
-    ))
-
-    # Remove blocked arguments from the list so they don't override our settings
-    dots <- dots[!names(dots) %in% blocked_args]
+  if (length(blocked)) {
+    cli::cli_warn(
+      "{.arg {blocked}} {?is/are} ignored because
+       {?it is/they are} controlled internally."
+    )
+    dots[blocked] <- NULL
   }
 
   # Strict type checks
@@ -78,20 +103,20 @@ read_excel_multi_headers <- function(
   all_sheet_names <- openxlsx2::wb_get_sheet_names(wb)
 
   # 3. Determine sheets to process using tidyselect
-  
+
   # Prepare choice vector for tidyselect (named vector of indices)
   sheet_choices <- rlang::set_names(seq_along(all_sheet_names), all_sheet_names)
-  
+
   # Evaluate selection
   selected_idx <- tidyselect::eval_select(
     rlang::enquo(sheets),
     data = sheet_choices
   )
-  
+
   if (length(selected_idx) == 0) {
     cli::cli_abort("No sheets matched the selection criteria.")
   }
-  
+
   sheets_to_process <- all_sheet_names[selected_idx]
 
   # 4. Processing Loop
@@ -114,6 +139,8 @@ read_excel_multi_headers <- function(
             col_names = FALSE, # Hardcoded overrides
             convert = FALSE,
             fill_merged_cells = TRUE,
+            skip_empty_rows = skip_empty_rows,
+            skip_empty_cols = skip_empty_cols,
             !!!dots, # Cleaned user arguments
             .env = rlang::current_env()
           )
@@ -123,9 +150,10 @@ read_excel_multi_headers <- function(
           }
 
           # B. Check Bounds
-          if (nrow(raw_df) < n_headers) {
+          if (nrow(raw_df) <= n_headers) {
             cli::cli_abort(
-              "Not enough rows. Read {nrow(raw_df)}, but header requires {n_headers}."
+              "Sheet has {nrow(raw_df)} row{?s} but {.arg n_headers}
+               is set to {n_headers}."
             )
           }
 
@@ -155,7 +183,7 @@ read_excel_multi_headers <- function(
             dplyr::slice((n_headers + 1):dplyr::n()) |>
             purrr::set_names(new_headers)
 
-          suppressMessages(readr::type_convert(data_df))
+          suppressMessages(readr::type_convert(data_df, na = character()))
         },
         error = function(e) {
           # Warn about the failure and return NULL
