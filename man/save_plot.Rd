@@ -48,7 +48,7 @@ A named list (returned invisibly) with elements:
 \item \code{file}: Full file path.
 \item \code{width}: Plot width.
 \item \code{height}: Plot height.
-\item \code{units}: Unit of \code{width} and \code{height}.
+\item \code{units}: Units of \code{width} and \code{height}.
 \item \code{dpi}: Plot resolution.
 }
 }

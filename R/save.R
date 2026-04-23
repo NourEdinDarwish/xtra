@@ -28,7 +28,7 @@
 #' * `file`: Full file path.
 #' * `width`: Plot width.
 #' * `height`: Plot height.
-#' * `units`: Unit of `width` and `height`.
+#' * `units`: Units of `width` and `height`.
 #' * `dpi`: Plot resolution.
 #' @seealso [ggplot2::ggsave()]
 #' @examples
