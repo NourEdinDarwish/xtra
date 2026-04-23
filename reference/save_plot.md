@@ -80,7 +80,7 @@ A named list (returned invisibly) with elements:
 
 - `height`: Plot height.
 
-- `units`: Unit of `width` and `height`.
+- `units`: Units of `width` and `height`.
 
 - `dpi`: Plot resolution.
 

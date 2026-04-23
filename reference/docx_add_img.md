@@ -93,7 +93,7 @@ img <- tempfile(fileext = ".png")
 png(img, width = 4, height = 3, units = "in", res = 72)
 plot(1:10, main = "Example Plot")
 dev.off()
-#> agg_record_19dc283a8ef3 
+#> agg_record_19cc7f088ae0 
 #>                       2 
 
 doc <- read_docx()
