@@ -3,5 +3,3 @@
 export(docx_add_img)
 export(read_excel_multi_headers)
 export(save_plot)
-importFrom(rlang,"!!!")
-importFrom(rlang,"!!")
