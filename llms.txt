@@ -16,6 +16,7 @@ You can install the development version of xtra from
 [GitHub](https://github.com/NourEdinDarwish/xtra) with:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("NourEdinDarwish/xtra")
 ```
