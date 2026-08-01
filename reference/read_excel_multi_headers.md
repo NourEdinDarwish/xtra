@@ -56,74 +56,65 @@ read_excel_multi_headers(
   Arguments passed on to
   [`openxlsx2::wb_to_df`](https://janmarvin.github.io/openxlsx2/reference/wb_to_df.html)
 
-  `start_row`
+  `start_row,start_col`
 
-  :   first row to begin looking for data.
-
-  `start_col`
-
-  :   first column to begin looking for data.
+  :   Optional numeric values specifying the first row or column to
+      begin data discovery.
 
   `row_names`
 
-  :   If `TRUE`, the first col of data will be used as row names.
+  :   Logical; if TRUE, uses the first column of the selection as row
+      names.
 
-  `skip_hidden_rows`
+  `skip_hidden_rows,skip_hidden_cols`
 
-  :   If `TRUE`, hidden rows are skipped.
+  :   Logical; if TRUE, excludes rows or columns marked as hidden in the
+      worksheet metadata.
 
-  `skip_hidden_cols`
+  `rows,cols`
 
-  :   If `TRUE`, hidden columns are skipped.
-
-  `rows`
-
-  :   A numeric vector specifying which rows in the xlsx file to read.
-      If `NULL`, all rows are read.
-
-  `cols`
-
-  :   A numeric vector specifying which columns in the xlsx file to
-      read. If `NULL`, all columns are read.
+  :   Optional numeric vectors specifying the exact indices to read.
 
   `detect_dates`
 
-  :   If `TRUE`, attempt to recognize dates and perform conversion.
+  :   Logical; if TRUE, identifies date and datetime styles for
+      conversion.
 
   `na`
 
-  :   Defines values to be treated as NA. Can be a character vector of
-      strings or a named list: list(strings = ..., numbers = ...). Blank
-      cells are always converted to `NA`.
+  :   A character vector or a named list (e.g.,
+      `list(strings = "", numbers = -99)`) defining values to treat as
+      `NA`.
 
   `dims`
 
-  :   Character string of type "A1:B2" as optional dimensions to be
-      imported.
+  :   A character string defining the range. Supports wildcards (e.g.,
+      "A1:++" or "A-:+5").
 
   `show_formula`
 
-  :   If `TRUE`, the underlying spreadsheet formulas are shown.
+  :   Logical; if TRUE, returns the formula strings instead of
+      calculated values.
 
   `named_region`
 
-  :   Character string with a `named_region` (defined name or table). If
-      no sheet is selected, the first appearance will be selected. See
-      [`wb_get_named_regions()`](https://janmarvin.github.io/openxlsx2/reference/named_region-wb.html)
+  :   A character string referring to a defined name or spreadsheet
+      Table.
 
   `keep_attributes`
 
-  :   If `TRUE` additional attributes are returned. (These are used
-      internally to define a cell type.)
+  :   Logical; if TRUE, attaches metadata such as the internal type
+      table (tt) and types as attributes to the output.
 
   `show_hyperlinks`
 
-  :   If `TRUE` instead of the displayed text, hyperlink targets are
-      shown.
+  :   Logical; if TRUE, replaces cell values with their underlying
+      hyperlink targets.
 
   `apply_numfmts`
 
-  :   If `TRUE` numeric formats are applied if detected.
+  :   Logical; if TRUE, applies spreadsheet number formatting and
+      returns strings.
 
 ## Value
 
