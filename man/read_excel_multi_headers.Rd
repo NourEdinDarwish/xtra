@@ -37,26 +37,26 @@ single data frame. If \code{FALSE}, always return a named list of data frames.}
 \item{...}{
   Arguments passed on to \code{\link[openxlsx2:wb_to_df]{openxlsx2::wb_to_df}}
   \describe{
-    \item{\code{start_row}}{first row to begin looking for data.}
-    \item{\code{start_col}}{first column to begin looking for data.}
-    \item{\code{row_names}}{If \code{TRUE}, the first col of data will be used as row names.}
-    \item{\code{skip_hidden_rows}}{If \code{TRUE}, hidden rows are skipped.}
-    \item{\code{skip_hidden_cols}}{If \code{TRUE}, hidden columns are skipped.}
-    \item{\code{rows}}{A numeric vector specifying which rows in the xlsx file to read.
-If \code{NULL}, all rows are read.}
-    \item{\code{cols}}{A numeric vector specifying which columns in the xlsx file to read.
-If \code{NULL}, all columns are read.}
-    \item{\code{detect_dates}}{If \code{TRUE}, attempt to recognize dates and perform conversion.}
-    \item{\code{na}}{Defines values to be treated as NA. Can be a character vector of strings
-or a named list: list(strings = ..., numbers = ...). Blank cells are always converted to \code{NA}.}
-    \item{\code{dims}}{Character string of type "A1:B2" as optional dimensions to be imported.}
-    \item{\code{show_formula}}{If \code{TRUE}, the underlying spreadsheet formulas are shown.}
-    \item{\code{named_region}}{Character string with a \code{named_region} (defined name or table).
-If no sheet is selected, the first appearance will be selected. See \code{\link[openxlsx2:wb_get_named_regions]{wb_get_named_regions()}}}
-    \item{\code{keep_attributes}}{If \code{TRUE} additional attributes are returned.
-(These are used internally to define a cell type.)}
-    \item{\code{show_hyperlinks}}{If \code{TRUE} instead of the displayed text, hyperlink targets are shown.}
-    \item{\code{apply_numfmts}}{If \code{TRUE} numeric formats are applied if detected.}
+    \item{\code{start_row,start_col}}{Optional numeric values specifying the first row or column
+to begin data discovery.}
+    \item{\code{row_names}}{Logical; if TRUE, uses the first column of the selection as row names.}
+    \item{\code{skip_hidden_rows,skip_hidden_cols}}{Logical; if TRUE, excludes rows or
+columns marked as hidden in the worksheet metadata.}
+    \item{\code{rows,cols}}{Optional numeric vectors specifying the exact indices to read.}
+    \item{\code{detect_dates}}{Logical; if TRUE, identifies date and datetime styles for conversion.}
+    \item{\code{na}}{A character vector or a named list (e.g., \code{list(strings = "", numbers = -99)})
+defining values to treat as \code{NA}.}
+    \item{\code{dims}}{A character string defining the range. Supports wildcards
+(e.g., "A1:++" or "A-:+5").}
+    \item{\code{show_formula}}{Logical; if TRUE, returns the formula strings instead of
+calculated values.}
+    \item{\code{named_region}}{A character string referring to a defined name or spreadsheet Table.}
+    \item{\code{keep_attributes}}{Logical; if TRUE, attaches metadata such as the internal
+type table (tt) and types as attributes to the output.}
+    \item{\code{show_hyperlinks}}{Logical; if TRUE, replaces cell values with their
+underlying hyperlink targets.}
+    \item{\code{apply_numfmts}}{Logical; if TRUE, applies spreadsheet number formatting
+and returns strings.}
   }}
 }
 \value{
