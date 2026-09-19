@@ -21,3 +21,9 @@
   adds an image to a Word document with optional captioning and
   auto-numbering. Large images are automatically scaled down to fit
   within the page margins.
+
+- New
+  [`merge_headers()`](https://nouredindarwish.github.io/xtra/reference/merge_headers.md)
+  vertically extends header cells through contiguous single-space
+  padding rows in flextables created from gtsummary objects. The cells
+  are merged only when the resulting area is rectangular.
