@@ -8,3 +8,4 @@ reference:
   - read_excel_multi_headers
   - save_plot
   - docx_add_img
+  - merge_headers
