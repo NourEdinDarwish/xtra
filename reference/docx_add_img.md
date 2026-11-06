@@ -3,7 +3,8 @@
 Adds an image to a Word document with optional captioning and
 auto-numbering. Images larger than the page margins are automatically
 scaled down to fit within the available page space while preserving
-their aspect ratio.
+their aspect ratio. The image and caption share one paragraph, separated
+by a line break.
 
 ## Usage
 
@@ -93,7 +94,7 @@ img <- tempfile(fileext = ".png")
 png(img, width = 4, height = 3, units = "in", res = 72)
 plot(1:10, main = "Example Plot")
 dev.off()
-#> agg_record_19427e63c35b 
+#> agg_record_1a17680db744 
 #>                       2 
 
 doc <- read_docx()
