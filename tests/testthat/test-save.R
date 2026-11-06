@@ -13,7 +13,7 @@ test_that("save_plot works with function plot", {
   expect_equal(result$width, 5)
   expect_equal(result$height, 4)
   expect_equal(result$units, "in")
-  
+
   # Ensure no named vectors are returned
   expect_null(names(result$width))
   expect_null(names(result$height))

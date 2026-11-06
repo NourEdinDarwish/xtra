@@ -1,6 +1,7 @@
 test_that("read_excel_multi_headers works", {
   # Build a simple workbook: merged "Demographics" over A1:B1, sub-headers in
   # row 2
+  # fmt: skip
   wb <- openxlsx2::wb_workbook()$
     add_worksheet("Sheet1")$
     add_data(x = "Demographics", dims = "A1")$
@@ -17,6 +18,8 @@ test_that("read_excel_multi_headers works", {
 
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 1)
-  expect_true(all(c("Demographics_Name", "Demographics_Age") %in% names(result))) # nolint
+  expect_true(all(
+    c("Demographics_Name", "Demographics_Age") %in% names(result)
+  ))
   expect_equal(result$Demographics_Name, "Alice")
 })

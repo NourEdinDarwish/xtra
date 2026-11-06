@@ -1,0 +1,13 @@
+linters: linters_with_defaults(
+    # Air and lintr disagree on valid indentation, causing style warnings.
+    # Let Air control indentation.
+    indentation_linter = NULL,
+    # Allow intentional commented code and explanatory examples.
+    commented_code_linter = NULL,
+    # This linter can mistake column references in tidyverse expressions
+    # for undefined variables.
+    # It also flags package functions when their packages are not attached
+    # in the R process running the linter, even with library() in the script.
+    # Disable it to avoid these false-positive warnings.
+    object_usage_linter = NULL
+  )

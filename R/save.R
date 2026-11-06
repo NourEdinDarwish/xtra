@@ -54,11 +54,14 @@ save_plot <- function(
 
   old_dev <- grDevices::dev.cur()
   dev(filename = filename, width = dim[1], height = dim[2], ...)
-  on.exit({
-    grDevices::dev.off()
-    # restore old device unless null device
-    if (old_dev > 1) grDevices::dev.set(old_dev)
-  }, add = TRUE)
+  on.exit(
+    {
+      grDevices::dev.off()
+      # restore old device unless null device
+      if (old_dev > 1) grDevices::dev.set(old_dev)
+    },
+    add = TRUE
+  )
 
   if (is.function(plot)) {
     plot()
@@ -73,11 +76,11 @@ save_plot <- function(
   dim_user <- from_inches(dim, units, dpi = dpi)
 
   invisible(list(
-    file   = filename,
-    width  = dim_user[1],
+    file = filename,
+    width = dim_user[1],
     height = dim_user[2],
-    units  = units,
-    dpi    = dpi
+    units = units,
+    dpi = dpi
   ))
 }
 
@@ -158,7 +161,7 @@ plot_dim <- function(
       default_dim <- grDevices::dev.size()
     }
     dim[is.na(dim)] <- default_dim[is.na(dim)]
-    dim_f <- prettyNum(from_inches(dim, units, dpi = dpi), digits = 3) # nolint
+    dim_f <- prettyNum(from_inches(dim, units, dpi = dpi), digits = 3)
 
     cli::cli_inform("Saving {dim_f[1]} x {dim_f[2]} {units} image")
   }

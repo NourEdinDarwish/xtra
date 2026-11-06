@@ -19,7 +19,10 @@
 #' @return The modified `flextable` object.
 #' @export
 #'
+# roxygen2 requires the examplesIf condition on one line.
+# nolint start: line_length_linter.
 #' @examplesIf (identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && requireNamespace("gtsummary", quietly = TRUE)
+# nolint end: line_length_linter.
 #' gtsummary::tbl_summary(
 #'   gtsummary::trial,
 #'   by = "trt",

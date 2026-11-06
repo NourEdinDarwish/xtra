@@ -33,7 +33,10 @@
 #'   columns that contain only missing values are removed.
 #' @param simplify If `TRUE` (the default) and only one sheet is read, return a
 #'   single data frame. If `FALSE`, always return a named list of data frames.
+# roxygen2 requires inheritDotParams on one line.
+# nolint start: line_length_linter.
 #' @inheritDotParams openxlsx2::wb_to_df -sheet -col_names -convert -fill_merged_cells -types -check_names -skip_empty_rows -skip_empty_cols
+# nolint end: line_length_linter.
 #' @return A data frame (if one sheet and `simplify = TRUE`) or a named list of
 #'   data frames.
 #' @examples

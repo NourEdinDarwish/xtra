@@ -3,6 +3,7 @@
 #' Adds an image to a Word document with optional captioning and auto-numbering.
 #' Images larger than the page margins are automatically scaled down to fit
 #' within the available page space while preserving their aspect ratio.
+#' The image and caption share one paragraph, separated by a line break.
 #'
 #' @param x An `rdocx` object, created with [officer::read_docx()].
 #' @param src Path to the image file.
@@ -57,7 +58,7 @@ docx_add_img <- function(
   checkmate::assert_string(src, min.chars = 1, .var.name = "src")
   checkmate::assert_file_exists(src, .var.name = "src")
 
-  # Dimensions & Units #nolint
+  # Dimensions & Units
   checkmate::assert_number(
     width,
     lower = 0,
@@ -73,11 +74,11 @@ docx_add_img <- function(
   units <- rlang::arg_match0(units, c("in", "cm", "mm", "px"))
   checkmate::assert_number(dpi, lower = 0, finite = TRUE, .var.name = "dpi")
 
-  # Caption & Content #nolint
+  # Caption & Content
   checkmate::assert_string(caption, null.ok = TRUE, .var.name = "caption")
   caption_pos <- rlang::arg_match0(caption_pos, c("below", "above"))
 
-  # Styling & Metadata Objects #nolint
+  # Styling & Metadata Objects
   checkmate::assert_class(
     autonum,
     "run_autonum",
@@ -134,14 +135,23 @@ docx_add_img <- function(
   )
 
   # 6. Assemble Paragraph
-  raw_chunks <- if (caption_pos == "above") {
-    list(autonum, caption_chunk, img_chunk)
+  # Start the caption on its own line within the same paragraph.
+  caption_break <- if (!is.null(caption) || !is.null(autonum)) {
+    officer::run_linebreak()
   } else {
-    list(img_chunk, autonum, caption_chunk)
+    NULL
   }
 
-  # Remove NULLs
-  chunks <- purrr::compact(raw_chunks)
+  raw_chunks <- if (caption_pos == "above") {
+    list(autonum, caption_chunk, caption_break, img_chunk)
+  } else {
+    list(img_chunk, caption_break, autonum, caption_chunk)
+  }
+
+  # We use discard() instead of compact() because compact() removes empty
+  # lists by default, including the one returned by run_linebreak().
+  # We only want to remove NULLs.
+  chunks <- purrr::discard(raw_chunks, is.null)
 
   fpar_obj <- if (is.null(fp_p)) {
     rlang::inject(officer::fpar(!!!chunks))
