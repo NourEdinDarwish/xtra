@@ -56,7 +56,12 @@ The modified \code{rdocx} object.
 Adds an image to a Word document with optional captioning and auto-numbering.
 Images larger than the page margins are automatically scaled down to fit
 within the available page space while preserving their aspect ratio.
-The image and caption share one paragraph, separated by a line break.
+}
+\details{
+When a caption or auto-numbering is provided, it is placed on a new line
+within the same paragraph as the image, with Word's "Keep lines together"
+option enabled so they are not split across a page break. An empty paragraph
+is also added after each figure for spacing.
 }
 \examples{
 library(officer)

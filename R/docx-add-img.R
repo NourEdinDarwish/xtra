@@ -3,7 +3,11 @@
 #' Adds an image to a Word document with optional captioning and auto-numbering.
 #' Images larger than the page margins are automatically scaled down to fit
 #' within the available page space while preserving their aspect ratio.
-#' The image and caption share one paragraph, separated by a line break.
+#'
+#' When a caption or auto-numbering is provided, it is placed on a new line
+#' within the same paragraph as the image, with Word's "Keep lines together"
+#' option enabled so they are not split across a page break. An empty paragraph
+#' is also added after each figure for spacing.
 #'
 #' @param x An `rdocx` object, created with [officer::read_docx()].
 #' @param src Path to the image file.
@@ -104,9 +108,18 @@ docx_add_img <- function(
   # Available height = Page Height - Top - Bottom
   # Note: header/footer in $margins are distances from edge to header/footer,
   # but margin.top/margin.bottom determine the main text body limits.
+  #
+  # Subtract space for the trailing empty paragraph (~0.20 in), plus a 2-line
+  # caption (~0.40 in) when a caption or numbering is present. Otherwise, an
+  # image scaled to the full page height leaves no room on the page for its
+  # caption or the empty paragraph, pushing them onto the next page (which can
+  # separate the caption from the image or create a blank page between two
+  # tall images).
   avail_height <- doc_dims$page[["height"]] -
     doc_dims$margins[["top"]] -
-    doc_dims$margins[["bottom"]]
+    doc_dims$margins[["bottom"]] -
+    0.20 -
+    if (!is.null(caption) || !is.null(autonum)) 0.40 else 0
 
   # 4. Auto-resize if necessary (maintaining aspect ratio)
   # Calculate scaling factor to fit within available dimensions
@@ -161,9 +174,25 @@ docx_add_img <- function(
 
   # 7. Add to Document
   x <- officer::body_add_fpar(x, fpar_obj)
-  # TODO want to know if I should use fpar here or make options, currently I
-  # think it just use default options of word for this line which is a good
-  # thing, also if add option for number of lines Add empty line for spacing
+
+  # The image and caption are in the same paragraph, separated by a line break
+  # (<w:br/>). By default, Word still allows a page break between lines of the
+  # same paragraph, which can put the image at the bottom of one page and the
+  # caption at the top of the next.
+  #
+  # Word's "Keep lines together" setting (<w:keepLines/> inside <w:pPr>) keeps
+  # all lines of a paragraph on the same page when the whole paragraph fits.
+  # Unlike keep_with_next (<w:keepNext/>), officer::fp_par() has no option for
+  # <w:keepLines/>, so we add it directly to the paragraph's <w:pPr> XML node.
+  if (!is.null(caption) || !is.null(autonum)) {
+    paragraph_properties <- xml2::xml_find_first(
+      officer::docx_current_block_xml(x),
+      "w:pPr"
+    )
+    xml2::xml_add_child(paragraph_properties, "w:keepLines")
+  }
+
+  # Add an empty paragraph after the figure for spacing
   x <- officer::body_add_par(x, "")
 
   x

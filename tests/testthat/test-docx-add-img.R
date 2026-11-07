@@ -16,7 +16,7 @@ test_that("docx_add_img works", {
   expect_true(file.exists(out))
 })
 
-test_that("captions and numbering are separated from images by a line break", {
+test_that("captions and numbering are placed on a new line and kept together", {
   img <- tempfile(fileext = ".png")
   grDevices::png(img, width = 400, height = 300)
   plot(1:10)
@@ -37,35 +37,26 @@ test_that("captions and numbering are separated from images by a line break", {
       body <- xml2::xml_find_first(officer::docx_body_xml(doc), "w:body")
       paragraphs <- xml2::xml_find_all(body, "w:p")
       figure <- paragraphs[[1]]
+      expect_length(xml2::xml_find_all(figure, "w:pPr/w:keepLines"), 1L)
       expect_length(paragraphs, 2L)
       expect_equal(xml2::xml_text(paragraphs[[2]]), "")
+      expect_length(
+        xml2::xml_find_all(paragraphs[[2]], "w:pPr/w:keepLines"),
+        0L
+      )
 
-      breaks <- xml2::xml_find_all(figure, ".//w:br")
+      breaks <- xml2::xml_find_all(figure, "w:r/w:br")
       expect_length(breaks, 1L)
       expect_equal(xml2::xml_attr(breaks, "type"), "textWrapping")
 
-      following <- xml2::xml_find_all(
-        figure,
-        ".//w:br/parent::w:r/following-sibling::w:r//w:drawing"
-      )
-      expect_length(following, if (caption_pos == "above") 1L else 0L)
-
-      if (content != "number") {
-        caption_after <- xml2::xml_find_all(
-          figure,
-          ".//w:br/parent::w:r/following-sibling::w:r/w:t"
-        )
-        expect_equal(
-          "Example caption" %in% xml2::xml_text(caption_after),
-          caption_pos == "below"
-        )
-      }
-      if (content != "caption") {
-        number_after <- xml2::xml_find_all(
-          figure,
-          ".//w:br/parent::w:r/following-sibling::w:r/w:instrText"
-        )
-        expect_length(number_after, if (caption_pos == "below") 1L else 0L)
+      runs <- xml2::xml_find_all(figure, "w:r")
+      n_runs <- length(runs)
+      if (caption_pos == "below") {
+        expect_length(xml2::xml_find_all(runs[[1]], "w:drawing"), 1L)
+        expect_length(xml2::xml_find_all(runs[[2]], "w:br"), 1L)
+      } else {
+        expect_length(xml2::xml_find_all(runs[[n_runs - 1L]], "w:br"), 1L)
+        expect_length(xml2::xml_find_all(runs[[n_runs]], "w:drawing"), 1L)
       }
     }
   }
@@ -90,5 +81,45 @@ test_that("images without captions or numbering have no line break", {
       xml2::xml_find_all(officer::docx_body_xml(doc), "//w:br"),
       0L
     )
+    expect_length(
+      xml2::xml_find_all(officer::docx_body_xml(doc), "//w:keepLines"),
+      0L
+    )
   }
+})
+
+test_that("tall images are scaled down with room for the caption and spacing", {
+  img <- tempfile(fileext = ".png")
+  grDevices::png(img, width = 400, height = 1400)
+  plot(1:10)
+  grDevices::dev.off()
+
+  base_doc <- officer::read_docx()
+  dims <- officer::docx_dim(base_doc)
+  page_avail_height <- dims$page[["height"]] -
+    dims$margins[["top"]] -
+    dims$margins[["bottom"]]
+
+  doc_uncaptioned <- docx_add_img(base_doc, src = img, width = 4, height = 14)
+  ext_uncaptioned <- xml2::xml_find_first(
+    officer::docx_body_xml(doc_uncaptioned),
+    "//wp:extent"
+  )
+  height_uncaptioned <- as.numeric(xml2::xml_attr(ext_uncaptioned, "cy")) /
+    914400
+  expect_equal(height_uncaptioned, page_avail_height - 0.20, tolerance = 1e-3)
+
+  doc_captioned <- docx_add_img(
+    officer::read_docx(),
+    src = img,
+    width = 4,
+    height = 14,
+    caption = "Tall plot caption"
+  )
+  ext_captioned <- xml2::xml_find_first(
+    officer::docx_body_xml(doc_captioned),
+    "//wp:extent"
+  )
+  height_captioned <- as.numeric(xml2::xml_attr(ext_captioned, "cy")) / 914400
+  expect_equal(height_captioned, page_avail_height - 0.60, tolerance = 1e-3)
 })
