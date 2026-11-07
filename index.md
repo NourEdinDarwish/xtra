@@ -9,6 +9,8 @@ currently includes:
   saves any plot to disk.
 - [`docx_add_img()`](https://nouredindarwish.github.io/xtra/reference/docx_add_img.html)
   adds images with optional captioning to Word documents.
+- [`theme_gtsummary_xtra()`](https://nouredindarwish.github.io/xtra/reference/theme_gtsummary_xtra.html)
+  sets a custom theme for gtsummary tables.
 - [`merge_headers()`](https://nouredindarwish.github.io/xtra/reference/merge_headers.html)
   merges header cells through compatible blank rows in flextables
   created from gtsummary objects.

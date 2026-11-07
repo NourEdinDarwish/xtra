@@ -2,9 +2,9 @@
 
 A growing collection of extra utility functions for R. Current tools
 include reading Excel files that use multiple header rows with merged
-cells, saving plots to disk, merging header cells across blank rows in
-flextables created from gtsummary objects, and adding images with
-optional captioning to Word documents.
+cells, saving plots to disk, adding images with optional captioning to
+Word documents, applying a custom gtsummary theme, and merging header
+cells across blank rows in flextables created from gtsummary objects.
 
 ## See also
 
