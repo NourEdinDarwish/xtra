@@ -91,7 +91,8 @@ to restore the default settings.
 
 ## See also
 
-[gtsummary::theme_gtsummary](https://www.danieldsjoberg.com/gtsummary/reference/theme_gtsummary.html),
+[Available gtsummary
+themes](https://www.danieldsjoberg.com/gtsummary/reference/theme_gtsummary.html),
 [`gtsummary::set_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.html),
 [`gtsummary::reset_gtsummary_theme()`](https://www.danieldsjoberg.com/gtsummary/reference/set_gtsummary_theme.html)
 

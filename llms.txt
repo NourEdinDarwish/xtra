@@ -1,7 +1,7 @@
 # xtra
 
-xtra provides a growing collection of extra utility functions for R. It
-currently includes:
+**xtra** provides a growing collection of e**xtra** utility functions
+for R. It currently includes:
 
 - [`read_excel_multi_headers()`](https://nouredindarwish.github.io/xtra/reference/read_excel_multi_headers.html)
   reads Excel files with multiple header rows and merged cells.
