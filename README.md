@@ -1,4 +1,3 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # xtra
@@ -8,10 +7,11 @@
 [![R-CMD-check](https://github.com/NourEdinDarwish/xtra/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/NourEdinDarwish/xtra/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/NourEdinDarwish/xtra/graph/badge.svg)](https://app.codecov.io/gh/NourEdinDarwish/xtra)
+
 <!-- badges: end -->
 
-xtra provides a growing collection of extra utility functions for R. It
-currently includes:
+**xtra** provides a growing collection of e**xtra** utility functions
+for R. It currently includes:
 
 - [`read_excel_multi_headers()`](https://nouredindarwish.github.io/xtra/reference/read_excel_multi_headers.html)
   reads Excel files with multiple header rows and merged cells.
@@ -19,6 +19,8 @@ currently includes:
   saves any plot to disk.
 - [`docx_add_img()`](https://nouredindarwish.github.io/xtra/reference/docx_add_img.html)
   adds images with optional captioning to Word documents.
+- [`theme_gtsummary_xtra()`](https://nouredindarwish.github.io/xtra/reference/theme_gtsummary_xtra.html)
+  sets a custom theme for gtsummary tables.
 - [`merge_headers()`](https://nouredindarwish.github.io/xtra/reference/merge_headers.html)
   merges header cells through compatible blank rows in flextables created
   from gtsummary objects.
@@ -28,7 +30,7 @@ currently includes:
 You can install the development version of xtra from
 [GitHub](https://github.com/NourEdinDarwish/xtra) with:
 
-``` r
+```r
 # install.packages("pak")
 pak::pak("NourEdinDarwish/xtra")
 ```

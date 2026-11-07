@@ -8,4 +8,5 @@ reference:
   - read_excel_multi_headers
   - save_plot
   - docx_add_img
+  - theme_gtsummary_xtra
   - merge_headers

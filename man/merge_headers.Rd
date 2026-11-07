@@ -30,7 +30,6 @@ vertical merge. Header content is never crossed, and cells that are already
 merged vertically are left unchanged.
 }
 \examples{
-\dontshow{if ((identical(Sys.getenv("NOT_CRAN"), "true") || identical(Sys.getenv("IN_PKGDOWN"), "true")) && requireNamespace("gtsummary", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 gtsummary::tbl_summary(
   gtsummary::trial,
   by = "trt",
@@ -41,5 +40,4 @@ gtsummary::tbl_summary(
   ) |>
   gtsummary::as_flex_table() |>
   merge_headers()
-\dontshow{\}) # examplesIf}
 }

@@ -13,6 +13,13 @@
   captioning and auto-numbering. Large images are automatically scaled down to
   fit within the page margins.
 
+* New `theme_gtsummary_xtra()` sets a custom theme for gtsummary tables (2-digit
+  p-values and regression estimates, bold labels that respect `remove_bold()`,
+  continuous summary type for numeric variables with few unique values, showing
+  all levels of dichotomous variables, Mean (SD) summary statistics with t-test
+  and ANOVA defaults in `add_p()`, merged estimate and CI columns, and
+  non-repeating Word headers).
+
 * New `merge_headers()` vertically extends header cells through contiguous
   single-space padding rows in flextables created from gtsummary objects. The
   cells are merged only when the resulting area is rectangular.

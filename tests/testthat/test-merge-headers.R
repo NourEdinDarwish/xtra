@@ -123,8 +123,6 @@ test_that("x must be a flextable", {
 })
 
 test_that("label headers span blank rows in flextables from gtsummary", {
-  skip_if_not_installed("gtsummary")
-
   tbl1 <- gtsummary::tbl_summary(
     gtsummary::trial,
     by = "trt",
