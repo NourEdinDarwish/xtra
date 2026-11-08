@@ -29,7 +29,8 @@
   continuous summary type for numeric variables with few unique values,
   showing all levels of dichotomous variables, Mean (SD) summary
   statistics with t-test and ANOVA defaults in `add_p()`, merged
-  estimate and CI columns, and non-repeating Word headers).
+  estimate and CI columns, non-repeating Word headers, and keeping
+  headers with the first body row and footers with the last body row).
 
 - New
   [`merge_headers()`](https://nouredindarwish.github.io/xtra/reference/merge_headers.md)
