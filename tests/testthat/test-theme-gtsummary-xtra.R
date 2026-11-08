@@ -109,8 +109,20 @@ test_that("pre_conversion bolds labels by default and respects remove_bold()", {
   expect_true(ft_custom$body$styles$text$bold$data[1, "label"])
   expect_false(ft_custom$body$styles$text$bold$data[2, "label"])
 
-  # Flextable Word property repeat_headers is set to FALSE
+  # Flextable Word property repeat_headers is set to FALSE and header/footer
+  # keep_with_next pagination is applied
   expect_false(ft_default$properties$opts_word$repeat_headers)
+  expect_true(all(ft_default$header$styles$pars$keep_with_next$data))
+  expect_false(ft_default$body$styles$pars$keep_with_next$data[1, "label"])
+  expect_true(ft_default$body$styles$pars$keep_with_next$data[2, "label"])
+
+  # Custom as_gtsummary() tables without a row_type column convert cleanly
+  # without informational messages
+  ft_custom_gts <- gtsummary::as_gtsummary(df) |>
+    expect_no_message() |>
+    gtsummary::as_flex_table() |>
+    expect_no_message()
+  expect_s3_class(ft_custom_gts, "flextable")
 })
 
 test_that("theme_gtsummary_xtra merges estimate and CI columns", {

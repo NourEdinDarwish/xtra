@@ -36,6 +36,10 @@ pipeline with \code{\link[gtsummary:remove_bold]{gtsummary::remove_bold()}}.
 \itemize{
 \item Disables repeating header rows across page breaks in Word documents
 (\code{opts_word = list(repeat_headers = FALSE)}).
+\item Keeps all header rows attached to the first body row and keeps footer
+rows attached to the last body row via
+\code{flextable::paginate(init = FALSE, hdr_ftr = TRUE)}, preventing headers
+or footnotes from splitting or sitting orphaned across page breaks.
 }
 \item \strong{Summary tables (\code{\link[gtsummary:tbl_summary]{gtsummary::tbl_summary()}}):}
 \itemize{

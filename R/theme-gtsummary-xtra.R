@@ -15,6 +15,10 @@
 #' * **Flextable output ([gtsummary::as_flex_table()]):**
 #'   * Disables repeating header rows across page breaks in Word documents
 #'     (`opts_word = list(repeat_headers = FALSE)`).
+#'   * Keeps all header rows attached to the first body row and keeps footer
+#'     rows attached to the last body row via
+#'     `flextable::paginate(init = FALSE, hdr_ftr = TRUE)`, preventing headers
+#'     or footnotes from splitting or sitting orphaned across page breaks.
 #' * **Summary tables ([gtsummary::tbl_summary()]):**
 #'   * Disables automatic conversion of numeric variables with few unique values
 #'     to categorical (`"assign_summary_type-arg:cat_threshold" = 0L`), so
@@ -67,6 +71,13 @@ theme_gtsummary_xtra <- function(set_theme = TRUE) {
     "pkgwide-str:theme_name" = "xtra",
     "pkgwide-fn:pvalue_fun" = gtsummary::label_style_pvalue(digits = 2),
     "pkgwide-fun:pre_conversion" = function(x) {
+      # Custom tables created with gtsummary::as_gtsummary() lack a "row_type"
+      # column, causing bold_labels() to emit an informational message before
+      # returning x unchanged. Return early to avoid that message.
+      if (!"row_type" %in% x$table_styling$header$column) {
+        return(x)
+      }
+
       # Place bold_labels() before existing user text_format rules so that
       # calls to remove_bold() in the user's pipeline take precedence.
       user_text_format <- x$table_styling$text_format
@@ -84,12 +95,20 @@ theme_gtsummary_xtra <- function(set_theme = TRUE) {
     # Flextable output ---------------------------------------------------------
     "as_flex_table-lst:addl_cmds" = list(
       # Insert after "valign" (the final step of gtsummary::as_flex_table())
-      # so this command runs at the end of the flextable pipeline.
+      # so these commands run at the end of the flextable pipeline.
       valign = list(
         rlang::expr(
           flextable::set_table_properties(
             opts_word = list(repeat_headers = FALSE)
           )
+        ),
+        # Disabling repeat_headers removes Word's <w:tblHeader/> tag, which
+        # otherwise keeps header rows together and attached to the first body
+        # row. paginate(init = FALSE, hdr_ftr = TRUE) sets keep_with_next on
+        # header rows (gluing the header to the first body row) and on the last
+        # body row + footer rows (so footnotes are not orphaned on a new page).
+        rlang::expr(
+          flextable::paginate(init = FALSE, hdr_ftr = TRUE)
         )
       )
     ),
